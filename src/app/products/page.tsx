@@ -23,6 +23,7 @@ export default async function ProductsPage() {
     brand: "القدس", // Default for now, as brand is not in schema
     price: p.price,
     image: p.image || "/placeholder.png",
+    isNew: p.isNew,
   }));
 
   return (
