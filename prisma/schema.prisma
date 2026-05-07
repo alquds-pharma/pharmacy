@@ -72,3 +72,17 @@ model OrderItem {
   @@index([productId])
   @@map("order_items")
 }
+
+model Report {
+  id          String   @id @default(cuid())
+  title       String   // e.g. "تقرير يومي - 2024/05/07"
+  type        String   // "DAILY" or "WEEKLY"
+  dateRange   String   // e.g. "2024/05/07"
+  totalAmount Float
+  ordersCount Int
+  fileUrl     String   // Cloudinary PDF link
+  createdAt   DateTime @default(now())
+
+  @@map("reports")
+}
+

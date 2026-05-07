@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Package, ShoppingBag, LayoutDashboard, Settings, Layers, Users, Bell, LogOut, Search } from "lucide-react";
+import { Package, ShoppingBag, LayoutDashboard, Settings, Layers, Users, Bell, LogOut, Search, BarChart3 } from "lucide-react";
 import LogoutButton from "@/components/admin/LogoutButton";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <SidebarLink href="/adcpanforpharmacyquds/products" icon={<Package className="w-5 h-5" />} label="الأدوية" />
             <SidebarLink href="/adcpanforpharmacyquds/categories" icon={<Layers className="w-5 h-5" />} label="الأصناف" />
             <SidebarLink href="/adcpanforpharmacyquds/orders" icon={<ShoppingBag className="w-5 h-5" />} label="الطلبات" />
+            <SidebarLink href="/adcpanforpharmacyquds/reports" icon={<BarChart3 className="w-5 h-5" />} label="التقارير المالية" />
           </div>
         </div>
 
@@ -75,8 +76,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t-2 border-primary/20 dark:border-slate-800 px-2 py-3 z-[100] flex justify-around items-center shadow-[0_-10px_30px_rgba(0,0,0,0.1)]">
         <MobileNavLink href="/adcpanforpharmacyquds" icon={<LayoutDashboard className="w-6 h-6" />} label="الرئيسية" />
         <MobileNavLink href="/adcpanforpharmacyquds/products" icon={<Package className="w-6 h-6" />} label="الأدوية" />
-        <MobileNavLink href="/adcpanforpharmacyquds/categories" icon={<Layers className="w-6 h-6" />} label="الأصناف" />
         <MobileNavLink href="/adcpanforpharmacyquds/orders" icon={<ShoppingBag className="w-6 h-6" />} label="الطلبات" />
+        <MobileNavLink href="/adcpanforpharmacyquds/reports" icon={<BarChart3 className="w-6 h-6" />} label="التقارير" />
       </nav>
     </div>
   );
