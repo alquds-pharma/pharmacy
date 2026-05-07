@@ -5,39 +5,60 @@ import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 
+import SplineScene from "./SplineScene";
+
 export default function FloatingCart() {
   const { cartItems, setIsCartOpen } = useCart();
   const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {itemCount > 0 && (
         <motion.button
-          initial={{ scale: 0, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0, opacity: 0, y: 20 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          layoutId="main-cart"
+          initial={{ scale: 0.8, y: -100 }}
+          animate={{ 
+            scale: 1, 
+            y: 0,
+            boxShadow: "0 25px 50px -12px rgba(45, 212, 191, 0.5)" 
+          }}
+          exit={{ scale: 0.5, opacity: 0, y: 100 }}
+          transition={{
+            type: "spring",
+            stiffness: 150,
+            damping: 15,
+            mass: 1
+          }}
           onClick={() => setIsCartOpen(true)}
-          className="fixed bottom-28 right-6 z-50 p-4 bg-primary text-white rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center border-4 border-white dark:border-slate-900 group"
+          className="fixed bottom-10 left-10 z-50 p-2 bg-white/20 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-2xl flex flex-col items-center justify-center border border-white/30 dark:border-slate-700/50 group overflow-hidden"
           aria-label="سلة المشتريات"
         >
-          <div className="relative">
-            <ShoppingCart className="w-7 h-7 group-hover:animate-bounce" />
-            <motion.span
+          {/* The 3D WOW Factor */}
+          <div className="relative w-28 h-28 flex items-center justify-center">
+            <SplineScene />
+            
+            {/* Number Badge with fancy animation */}
+            <motion.div 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               key={itemCount}
-              className="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-white dark:border-slate-900 shadow-lg"
+              className="absolute top-4 right-4 bg-teal text-white text-sm font-black w-8 h-8 flex items-center justify-center rounded-full shadow-lg border-2 border-white dark:border-slate-900 z-10"
             >
               {itemCount}
-            </motion.span>
+            </motion.div>
           </div>
-          
-          {/* Tooltip on hover for desktop */}
-          <span className="absolute right-full mr-4 px-3 py-1 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">
-            عرض السلة
-          </span>
+
+          <div className="pb-4 px-4 flex flex-col items-center">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary dark:text-teal-light opacity-80">
+              Your Cart
+            </span>
+            <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">
+              انقر للعرض
+            </span>
+          </div>
+
+          {/* Glow Effect */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-teal/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         </motion.button>
       )}
     </AnimatePresence>

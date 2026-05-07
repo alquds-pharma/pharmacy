@@ -43,29 +43,63 @@ export async function generateDailyReport() {
     const dateStr = new Date().toLocaleDateString("ar-EG").replace(/\//g, "-");
     const reportTitle = `تقرير المبيعات اليومي - ${dateStr}`;
 
-    // 2. Prepare Data for Excel
-    const data = orders.map((order) => ({
-      "رقم الطلب": order.id,
-      "اسم العميل": order.customerName,
-      "رقم الهاتف": order.customerPhone,
-      "العنوان / الملاحظات": order.customerAddress,
-      "نوع الطلب": order.type === "PRESCRIPTION" ? "وصفة طبية" : "سلة مشتريات",
-      "المبلغ الإجمالي": order.totalAmount,
-      "حالة الطلب": order.status,
-      "التاريخ والوقت": new Date(order.createdAt).toLocaleString("ar-EG"),
-    }));
+    // 2. Prepare Data for Excel (Full Details)
+    const data = orders.map((order) => {
+      // Format items list: "Medicine A (x2), Medicine B (x1)"
+      const itemsList = order.items.length > 0 
+        ? order.items.map(item => `${item.productName} (x${item.quantity})`).join(", ")
+        : (order.type === "PRESCRIPTION" ? "طلب عبر صورة وصفة" : "سلة فارغة");
 
-    // 3. Create Workbook and Worksheet
-    const worksheet = XLSX.utils.json_to_sheet(data);
+      return {
+        "رقم الطلب": order.id,
+        "اسم العميل": order.customerName,
+        "رقم الهاتف": order.customerPhone,
+        "العنوان / الملاحظات": order.customerAddress,
+        "الأدوية المطلوبة": itemsList, // Detailed items
+        "نوع الطلب": order.type === "PRESCRIPTION" ? "وصفة طبية" : "سلة مشتريات",
+        "المبلغ الإجمالي": order.totalAmount,
+        "رابط الوصفة (إن وجد)": order.image || "لا يوجد",
+        "حالة الطلب": order.status,
+        "التاريخ والوقت": new Date(order.createdAt).toLocaleString("ar-EG"),
+      };
+    });
+
+    // 3. Create Workbook and Worksheet with Formal Header
+    const header = [
+      ["صيدلية القدس"],
+      ["تقرير المبيعات المالي الرسمي"],
+      [`تاريخ توليد التقرير: ${new Date().toLocaleString("ar-EG")}`],
+      [`إجمالي الإيرادات في هذا التقرير: ${totalAmount.toLocaleString()} ريال`],
+      [], // Empty row for spacing
+      ["رقم الطلب", "اسم العميل", "رقم الهاتف", "العنوان / الملاحظات", "الأدوية المطلوبة", "نوع الطلب", "المبلغ الإجمالي", "رابط الوصفة", "حالة الطلب", "التاريخ والوقت"]
+    ];
+
+    // Convert data objects to arrays for aoa_to_sheet
+    const rows = data.map(item => [
+      item["رقم الطلب"],
+      item["اسم العميل"],
+      item["رقم الهاتف"],
+      item["العنوان / الملاحظات"],
+      item["الأدوية المطلوبة"],
+      item["نوع الطلب"],
+      item["المبلغ الإجمالي"],
+      item["رابط الوصفة (إن وجد)"],
+      item["حالة الطلب"],
+      item["التاريخ والوقت"]
+    ]);
+
+    const worksheet = XLSX.utils.aoa_to_sheet([...header, ...rows]);
     
-    // Set column widths
+    // Set column widths (Enhanced for more content)
     const wscols = [
-      { wch: 20 }, // ID
-      { wch: 20 }, // Customer
+      { wch: 18 }, // ID
+      { wch: 18 }, // Customer
       { wch: 15 }, // Phone
-      { wch: 30 }, // Address
+      { wch: 25 }, // Address
+      { wch: 45 }, // Medicines
       { wch: 15 }, // Type
       { wch: 15 }, // Amount
+      { wch: 35 }, // Prescription Link
       { wch: 15 }, // Status
       { wch: 25 }, // Date
     ];
@@ -76,7 +110,7 @@ export async function generateDailyReport() {
     worksheet["!views"].push({ RTL: true });
 
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "المبيعات");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "تقرير المبيعات");
 
     const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
     
