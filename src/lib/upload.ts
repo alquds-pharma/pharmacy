@@ -49,7 +49,7 @@ export async function uploadRaw(file: Blob, filename: string, folder: string = '
   formData.append('file', file);
   formData.append('upload_preset', uploadPreset);
   formData.append('folder', folder);
-  formData.append('public_id', filename.split('.')[0]);
+  formData.append('public_id', filename); // Keep extension
 
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,

@@ -3,17 +3,13 @@ import { generateDailyReport, getReports } from "@/app/actions/report";
 import { FileText, Download, TrendingUp, Calendar, Trash2, Plus, ArrowUpRight, BarChart3 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
+import ReportButton from "@/components/admin/ReportButton";
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminReportsPage() {
   const reports = await getReports();
   const ordersCount = await prisma.order.count();
-
-  async function handleGenerate() {
-    "use server";
-    await generateDailyReport();
-    revalidatePath("/adcpanforpharmacyquds/reports");
-  }
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 text-right" dir="rtl">
@@ -23,18 +19,7 @@ export default async function AdminReportsPage() {
           <p className="text-slate-500 dark:text-slate-400">إدارة وتوليد تقارير المبيعات اليومية والأسبوعية</p>
         </div>
 
-        <form action={handleGenerate}>
-          <button 
-            disabled={ordersCount === 0}
-            className="flex items-center gap-2 px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus className="w-5 h-5" />
-            توليد تقرير جديد الآن
-          </button>
-          {ordersCount === 0 && (
-            <p className="text-[10px] text-red-500 mt-2 font-bold text-center">لا توجد طلبات جديدة لتوليد تقرير</p>
-          )}
-        </form>
+        <ReportButton ordersCount={ordersCount} />
       </div>
 
       {/* Summary Cards */}
@@ -85,7 +70,7 @@ export default async function AdminReportsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {reports.map((report) => (
+              {reports.map((report: any) => (
                 <tr key={report.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all">
                   <td className="p-5">
                     <div className="flex items-center gap-3">
