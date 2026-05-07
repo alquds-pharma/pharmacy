@@ -41,7 +41,7 @@ export async function addProduct(formData: FormData) {
 
   let imageUrl = "/products/default.jpg";
   if (imageFile && imageFile.size > 0) {
-    imageUrl = await uploadImage(imageFile);
+    imageUrl = await uploadImage(imageFile, "products");
   }
 
   if (!name || isNaN(price) || (categoryIds.length === 0 && !newCategoryName)) {
@@ -122,7 +122,7 @@ export async function updateProduct(id: string, formData: FormData) {
   };
 
   if (imageFile && imageFile.size > 0) {
-    updateData.image = await uploadImage(imageFile);
+    updateData.image = await uploadImage(imageFile, "products");
   }
 
   await prisma.product.update({
@@ -178,7 +178,7 @@ export async function addCategory(formData: FormData) {
 
   let imageUrl = null;
   if (imageFile && imageFile.size > 0) {
-    imageUrl = await uploadImage(imageFile);
+    imageUrl = await uploadImage(imageFile, "products");
   }
 
   // Custom ID generation

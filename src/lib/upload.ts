@@ -10,9 +10,9 @@
  *      NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_preset_name
  */
 
-export async function uploadImage(file: File, folder: string = 'pharmacy'): Promise<string> {
+export async function uploadImage(file: File, folder: string = "pharmacy"): Promise<string> {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "pharmacy_preset";
 
   if (!cloudName || !uploadPreset) {
     console.warn('Cloudinary غير مُهيَّأ — سيُستخدم الرابط الافتراضي');
@@ -22,7 +22,7 @@ export async function uploadImage(file: File, folder: string = 'pharmacy'): Prom
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', uploadPreset);
-  formData.append('folder', folder);
+  formData.append('folder', folder); // Add folder support here
 
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,

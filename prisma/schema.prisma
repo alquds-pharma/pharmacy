@@ -74,7 +74,7 @@ model OrderItem {
 }
 
 model Report {
-  id          String   @id @default(cuid())
+  id          String   @id
   title       String   // e.g. "تقرير يومي - 2024/05/07"
   type        String   // "DAILY" or "WEEKLY"
   dateRange   String   // e.g. "2024/05/07"

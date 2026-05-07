@@ -5,6 +5,26 @@ import { revalidatePath } from "next/cache";
 import { uploadRaw } from "@/lib/upload";
 import * as XLSX from "xlsx";
 
+async function generateReportId(): Promise<string> {
+  const date = new Date();
+  const dd = date.getDate().toString().padStart(2, '0');
+  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+  const yy = date.getFullYear().toString().slice(-2);
+  const prefix = `REP-${dd}${mm}${yy}`;
+
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const todayCount = await (prisma as any).report.count({
+    where: { createdAt: { gte: startOfDay, lte: endOfDay } },
+  });
+
+  const seq = (todayCount + 1).toString().padStart(4, '0');
+  return `${prefix}-${seq}`;
+}
+
 export async function generateDailyReport() {
   try {
     // 1. Get all orders currently in DB
@@ -24,7 +44,6 @@ export async function generateDailyReport() {
     const reportTitle = `تقرير المبيعات اليومي - ${dateStr}`;
 
     // 2. Prepare Data for Excel
-    // We create an array of objects with Arabic keys for the headers
     const data = orders.map((order) => ({
       "رقم الطلب": order.id,
       "اسم العميل": order.customerName,
@@ -52,24 +71,24 @@ export async function generateDailyReport() {
     ];
     worksheet["!cols"] = wscols;
 
-    // Set Sheet to RTL (Right-to-Left)
+    // Set Sheet to RTL
     if (!worksheet["!views"]) worksheet["!views"] = [];
     worksheet["!views"].push({ RTL: true });
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "المبيعات");
 
-    // 4. Write to Buffer
     const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
     
-    // 5. Upload to Cloudinary
+    // 4. Upload to Cloudinary
     const filename = `report_${Date.now()}.xlsx`;
-    // We use a Blob for the uploadRaw function we created earlier
     const fileUrl = await uploadRaw(new Blob([excelBuffer]), filename, "reports");
 
-    // 6. Save Report Record
-    await prisma.report.create({
+    // 5. Generate Custom ID and Save Report
+    const reportId = await generateReportId();
+    await (prisma as any).report.create({
       data: {
+        id: reportId,
         title: reportTitle,
         type: "DAILY",
         dateRange: dateStr,
@@ -99,7 +118,7 @@ export async function generateDailyReport() {
 }
 
 export async function getReports() {
-  return await prisma.report.findMany({
+  return await (prisma as any).report.findMany({
     orderBy: { createdAt: "desc" },
   });
 }
