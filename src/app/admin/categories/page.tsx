@@ -18,8 +18,22 @@ export default async function AdminCategoriesPage() {
   async function addCategory(formData: FormData) {
     "use server";
     const name = formData.get("name") as string;
+    const imageFile = formData.get("image") as File;
+
     if (!name) return;
-    await prisma.category.create({ data: { name } });
+
+    let imageUrl = null;
+    if (imageFile && imageFile.size > 0) {
+      const { uploadImage } = await import("@/lib/upload");
+      imageUrl = await uploadImage(imageFile);
+    }
+
+    await prisma.category.create({ 
+      data: { 
+        name,
+        image: imageUrl 
+      } 
+    });
     revalidatePath("/adcpanforpharmacyquds/categories");
   }
 
@@ -46,7 +60,16 @@ export default async function AdminCategoriesPage() {
                   name="name" 
                   required 
                   placeholder="مثال: أدوية الأطفال" 
-                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white" 
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white mb-4" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 dark:text-slate-300">صورة القسم</label>
+                <input 
+                  type="file" 
+                  name="image" 
+                  accept="image/*"
+                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white text-xs" 
                 />
               </div>
               <button 
@@ -76,8 +99,12 @@ export default async function AdminCategoriesPage() {
                     <tr key={category.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all">
                       <td className="p-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                            <Hash className="w-5 h-5" />
+                          <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary relative overflow-hidden">
+                            {category.image ? (
+                              <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <Hash className="w-5 h-5" />
+                            )}
                           </div>
                           <span className="font-bold text-slate-800 dark:text-white">{category.name}</span>
                         </div>

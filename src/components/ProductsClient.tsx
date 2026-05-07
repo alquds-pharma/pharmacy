@@ -12,7 +12,7 @@ export default function ProductsClient({
   categories 
 }: { 
   initialProducts: Product[];
-  categories: string[];
+  categories: { id: string, name: string, image: string | null }[];
 }) {
   const [selectedCategory, setSelectedCategory] = useState("الكل");
   const [selectedBrand, setSelectedBrand] = useState("الكل");

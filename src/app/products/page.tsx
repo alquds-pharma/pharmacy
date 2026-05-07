@@ -29,7 +29,7 @@ export default async function ProductsPage() {
   return (
     <ProductsClient 
       initialProducts={dbProducts} 
-      categories={categories.map(c => c.name)} 
+      categories={categories} 
     />
   );
 }

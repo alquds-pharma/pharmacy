@@ -5,7 +5,7 @@ import { ChevronLeft, Filter, X, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 
 interface FilterProps {
-  categories: string[];
+  categories: { id: string, name: string, image: string | null }[];
   selectedCategory: string;
   setSelectedCategory: (cat: string) => void;
   selectedBrand: string;
@@ -77,12 +77,12 @@ export default function ProductFilter({
             جميع الأصناف
           </button>
           {categories.map((category) => {
-            const meta = CATEGORY_META[category] ?? DEFAULT_META;
-            const isActive = selectedCategory === category;
+            const meta = CATEGORY_META[category.name] ?? DEFAULT_META;
+            const isActive = selectedCategory === category.name;
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.name)}
                 className={`w-full text-right px-4 py-3 rounded-xl transition-all flex items-center gap-3 group text-sm ${
                   isActive
                     ? "bg-primary text-white shadow-md font-bold"
@@ -90,13 +90,17 @@ export default function ProductFilter({
                 }`}
               >
                 <span
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-base shrink-0 ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-base shrink-0 overflow-hidden ${
                     isActive ? "bg-white/20" : `${meta.bg} ${meta.darkBg}`
                   }`}
                 >
-                  {meta.emoji}
+                  {category.image ? (
+                    <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
+                  ) : (
+                    meta.emoji
+                  )}
                 </span>
-                <span className="flex-1 text-right">{category}</span>
+                <span className="flex-1 text-right">{category.name}</span>
                 <ChevronLeft
                   className={`w-4 h-4 shrink-0 transition-transform ${
                     isActive ? "rotate-180" : "group-hover:-translate-x-1"
@@ -185,23 +189,27 @@ export default function ProductFilter({
         {/* Row 2: Category circles (horizontal scroll) */}
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
           {categories.map((category) => {
-            const meta = CATEGORY_META[category] ?? DEFAULT_META;
-            const isActive = selectedCategory === category;
+            const meta = CATEGORY_META[category.name] ?? DEFAULT_META;
+            const isActive = selectedCategory === category.name;
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.name)}
                 className="flex flex-col items-center gap-1.5 shrink-0 group"
               >
                 {/* Circle image */}
                 <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl transition-all duration-200 border-2 ${
+                  className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl transition-all duration-200 border-2 overflow-hidden ${
                     isActive
                       ? "border-primary bg-primary/10 dark:bg-primary/20 scale-105 shadow-lg shadow-primary/20"
                       : `border-transparent ${meta.bg} ${meta.darkBg} group-active:scale-95`
                   }`}
                 >
-                  {prefixEmoji(category, meta.emoji)}
+                  {category.image ? (
+                    <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
+                  ) : (
+                    prefixEmoji(category.name, meta.emoji)
+                  )}
                 </div>
                 {/* Label */}
                 <span
@@ -211,7 +219,7 @@ export default function ProductFilter({
                       : "text-slate-500 dark:text-slate-400"
                   }`}
                 >
-                  {category}
+                  {category.name}
                 </span>
               </button>
             );
