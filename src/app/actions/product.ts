@@ -11,7 +11,6 @@ async function generateProductId(): Promise<string> {
   const yy = date.getFullYear().toString().slice(-2);
   const prefix = `PRD-${dd}${mm}${yy}`;
 
-  // Count products created today to get sequential number
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
   const endOfDay = new Date(date);
@@ -23,6 +22,12 @@ async function generateProductId(): Promise<string> {
 
   const seq = (todayCount + 1).toString().padStart(4, '0');
   return `${prefix}-${seq}`;
+}
+
+async function generateCategoryId(): Promise<string> {
+  const count = await prisma.category.count();
+  const seq = (count + 1).toString().padStart(3, '0');
+  return `CAT-${seq}`;
 }
 
 export async function addProduct(formData: FormData) {
@@ -46,12 +51,16 @@ export async function addProduct(formData: FormData) {
   const connectIds = categoryIds.map(id => ({ id }));
 
   if (newCategoryName) {
-    const category = await prisma.category.upsert({
-      where: { name: newCategoryName },
-      update: {},
-      create: { name: newCategoryName },
-    });
-    connectIds.push({ id: category.id });
+    const existing = await prisma.category.findUnique({ where: { name: newCategoryName } });
+    if (existing) {
+      connectIds.push({ id: existing.id });
+    } else {
+      const categoryId = await generateCategoryId();
+      const category = await prisma.category.create({
+        data: { id: categoryId, name: newCategoryName }
+      });
+      connectIds.push({ id: category.id });
+    }
   }
 
   const productId = await generateProductId();
@@ -159,4 +168,31 @@ export async function deleteCategory(id: string) {
       error: "حدث خطأ أثناء حذف الصنف" 
     };
   }
+}
+
+export async function addCategory(formData: FormData) {
+  const name = formData.get("name") as string;
+  const imageFile = formData.get("image") as File;
+
+  if (!name) throw new Error("Name is required");
+
+  let imageUrl = null;
+  if (imageFile && imageFile.size > 0) {
+    imageUrl = await uploadImage(imageFile);
+  }
+
+  // Custom ID generation
+  const count = await prisma.category.count();
+  const categoryId = `CAT-${(count + 1).toString().padStart(3, '0')}`;
+
+  await prisma.category.create({ 
+    data: { 
+      id: categoryId,
+      name,
+      image: imageUrl 
+    } as any
+  });
+
+  revalidatePath("/adcpanforpharmacyquds/categories");
+  revalidatePath("/products");
 }

@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { getCategories, deleteCategory } from "@/app/actions/product";
+import { getCategories, deleteCategory, addCategory } from "@/app/actions/product";
 import { Trash2, FolderPlus, Search, Hash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
@@ -15,27 +15,7 @@ export default async function AdminCategoriesPage() {
     orderBy: { name: 'asc' }
   });
 
-  async function addCategory(formData: FormData) {
-    "use server";
-    const name = formData.get("name") as string;
-    const imageFile = formData.get("image") as File;
 
-    if (!name) return;
-
-    let imageUrl = null;
-    if (imageFile && imageFile.size > 0) {
-      const { uploadImage } = await import("@/lib/upload");
-      imageUrl = await uploadImage(imageFile);
-    }
-
-    await prisma.category.create({ 
-      data: { 
-        name,
-        image: imageUrl 
-      } 
-    });
-    revalidatePath("/adcpanforpharmacyquds/categories");
-  }
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 text-right" dir="rtl">
@@ -95,7 +75,7 @@ export default async function AdminCategoriesPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {categories.map(category => (
+                  {categories.map((category: any) => (
                     <tr key={category.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all">
                       <td className="p-5">
                         <div className="flex items-center gap-3">

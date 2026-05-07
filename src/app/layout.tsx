@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
 import { CartProvider } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
+import FloatingCart from "@/components/FloatingCart";
 
 const tajawal = Tajawal({
   subsets: ["arabic"],
@@ -55,6 +56,7 @@ export default function RootLayout({
           </div>
           <BottomNav />
           <CartSidebar />
+          <FloatingCart />
         </CartProvider>
       </body>
     </html>

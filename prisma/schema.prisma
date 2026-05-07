@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Category {
-  id        String    @id @default(cuid())
+  id        String    @id
   name      String    @unique
   image     String?
   products  Product[] @relation("ProductToCategory")
@@ -23,7 +23,7 @@ model Category {
 }
 
 model Product {
-  id          String      @id @default(cuid())
+  id          String      @id
   name        String
   description String?
   price       Float
