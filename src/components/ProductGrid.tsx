@@ -89,7 +89,7 @@ export default function ProductGrid({ products }: GridProps) {
                     {product.brand || "القدس"}
                   </span>
                   <span className="text-[9px] md:text-[10px] font-medium text-slate-400 truncate">
-                    {product.category}
+                    {product.categories.join(", ")}
                   </span>
                 </div>
 

@@ -15,6 +15,7 @@ export default function AddProductForm({ categories }: { categories: Category[] 
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +34,14 @@ export default function AddProductForm({ categories }: { categories: Category[] 
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     formData.set("isNew", isNew.toString());
+    selectedCategories.forEach(id => formData.append("categoryIds", id));
     try {
       await addProduct(formData);
       formRef.current?.reset();
       setPreview(null);
       setShowNewCategory(false);
       setIsNew(false);
+      setSelectedCategories([]);
     } catch (error) {
       alert("فشل في إضافة الدواء");
     } finally {
@@ -81,41 +84,48 @@ export default function AddProductForm({ categories }: { categories: Category[] 
           <input type="hidden" name="price" value="0" />
           
           <div>
-            <label className="block text-sm font-bold mb-2 dark:text-slate-300">القسم</label>
-            {!showNewCategory ? (
-              <div className="flex gap-2">
-                <select name="categoryId" className="flex-1 p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white">
-                  <option value="">اختر القسم...</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
-                <button 
-                  type="button" 
-                  onClick={() => setShowNewCategory(true)}
-                  className="p-3 bg-teal/10 text-teal rounded-2xl hover:bg-teal hover:text-white transition-all"
-                  title="إضافة قسم جديد"
-                >
-                  <Plus className="w-5 h-5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-bold dark:text-slate-300">الأقسام</label>
+              <button 
+                type="button" 
+                onClick={() => setShowNewCategory(!showNewCategory)}
+                className="text-[10px] bg-teal/10 text-teal px-2 py-1 rounded-lg hover:bg-teal hover:text-white transition-all flex items-center gap-1"
+              >
+                {showNewCategory ? <X className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                {showNewCategory ? "إلغاء" : "قسم جديد"}
+              </button>
+            </div>
+
+            {showNewCategory && (
+              <div className="mb-3 animate-in slide-in-from-top-2 duration-200">
                 <input 
                   type="text" 
                   name="newCategoryName" 
                   placeholder="اسم القسم الجديد" 
-                  className="flex-1 p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white" 
+                  className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white text-sm" 
                 />
-                <button 
-                  type="button" 
-                  onClick={() => setShowNewCategory(false)}
-                  className="p-3 bg-red-100 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all"
-                >
-                  <X className="w-5 h-5" />
-                </button>
               </div>
             )}
+
+            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+              {categories.map(cat => (
+                <label key={cat.id} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedCategories.includes(cat.id)}
+                    onChange={(e) => {
+                      if(e.target.checked) setSelectedCategories([...selectedCategories, cat.id])
+                      else setSelectedCategories(selectedCategories.filter(id => id !== cat.id))
+                    }}
+                    className="w-4 h-4 rounded border-slate-300 text-teal focus:ring-teal cursor-pointer"
+                  />
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 truncate">{cat.name}</span>
+                </label>
+              ))}
+              {categories.length === 0 && (
+                <p className="col-span-2 text-center text-xs text-slate-400 py-4">لا توجد أقسام حالياً</p>
+              )}
+            </div>
           </div>
         </div>
 

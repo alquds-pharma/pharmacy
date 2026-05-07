@@ -17,9 +17,8 @@ type Product = {
   description: string | null;
   price: number;
   image: string | null;
-  categoryId: string;
   isNew: boolean;
-  category: Category;
+  categories: Category[];
 };
 
 export default function ProductsList({ 
@@ -32,7 +31,7 @@ export default function ProductsList({
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [filter, setFilter] = useState("ALL");
 
-  const filteredProducts = initialProducts.filter(p => filter === "ALL" ? true : p.categoryId === filter);
+  const filteredProducts = initialProducts.filter(p => filter === "ALL" ? true : p.categories.some(c => c.id === filter));
 
   return (
     <div className="space-y-6">
@@ -94,9 +93,16 @@ export default function ProductsList({
                     </div>
                   </td>
                   <td className="p-5">
-                    <span className="px-3 py-1 bg-teal/10 text-teal rounded-full text-xs font-bold">
-                      {product.category.name}
-                    </span>
+                    <div className="flex flex-wrap gap-1 max-w-[150px]">
+                      {product.categories.map(cat => (
+                        <span key={cat.id} className="px-2 py-0.5 bg-teal/10 text-teal rounded-full text-[10px] font-bold">
+                          {cat.name}
+                        </span>
+                      ))}
+                      {product.categories.length === 0 && (
+                        <span className="text-xs text-slate-400">بدون تصنيف</span>
+                      )}
+                    </div>
                   </td>
 
                   <td className="p-5">

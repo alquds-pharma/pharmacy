@@ -7,7 +7,7 @@ export const BRANDS = [
 export interface Product {
   id: string | number;
   name: string;
-  category: string;
+  categories: string[];
   brand?: string;
   price: number;
   description?: string;

@@ -14,7 +14,7 @@ datasource db {
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
-  products  Product[]
+  products  Product[] @relation("ProductToCategory")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -27,14 +27,12 @@ model Product {
   description String?
   price       Float
   image       String?
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
   isNew       Boolean     @default(false)
+  categories  Category[]  @relation("ProductToCategory")
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  @@index([categoryId])
   @@map("products")
 }
 

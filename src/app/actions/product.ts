@@ -30,7 +30,7 @@ export async function addProduct(formData: FormData) {
   const description = formData.get("description") as string;
   const price = parseFloat(formData.get("price") as string);
   const imageFile = formData.get("image") as File;
-  const categoryId = formData.get("categoryId") as string;
+  const categoryIds = formData.getAll("categoryIds") as string[];
   const newCategoryName = formData.get("newCategoryName") as string;
   const isNew = formData.get("isNew") === "true";
 
@@ -39,17 +39,19 @@ export async function addProduct(formData: FormData) {
     imageUrl = await uploadImage(imageFile);
   }
 
-  if (!name || isNaN(price) || (!categoryId && !newCategoryName)) {
+  if (!name || isNaN(price) || (categoryIds.length === 0 && !newCategoryName)) {
     throw new Error("Missing required fields");
   }
 
-  let finalCategoryId = categoryId;
+  const connectIds = categoryIds.map(id => ({ id }));
 
   if (newCategoryName) {
-    const category = await prisma.category.create({
-      data: { name: newCategoryName },
+    const category = await prisma.category.upsert({
+      where: { name: newCategoryName },
+      update: {},
+      create: { name: newCategoryName },
     });
-    finalCategoryId = category.id;
+    connectIds.push({ id: category.id });
   }
 
   const productId = await generateProductId();
@@ -60,8 +62,10 @@ export async function addProduct(formData: FormData) {
       description,
       price,
       image: imageUrl,
-      categoryId: finalCategoryId,
       isNew,
+      categories: {
+        connect: connectIds
+      }
     },
   });
 
@@ -94,16 +98,18 @@ export async function updateProduct(id: string, formData: FormData) {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const price = parseFloat(formData.get("price") as string);
-  const categoryId = formData.get("categoryId") as string;
+  const categoryIds = formData.getAll("categoryIds") as string[];
   const imageFile = formData.get("image") as File;
   const isNew = formData.get("isNew") === "true";
 
-  const updateData: Record<string, unknown> = {
+  const updateData: any = {
     name,
     description,
     price,
-    categoryId,
     isNew,
+    categories: {
+      set: categoryIds.map(id => ({ id }))
+    }
   };
 
   if (imageFile && imageFile.size > 0) {
@@ -130,7 +136,7 @@ export async function getCategories() {
 export async function deleteCategory(id: string) {
   try {
     const productsCount = await prisma.product.count({
-      where: { categoryId: id },
+      where: { categories: { some: { id } } },
     });
 
     if (productsCount > 0) {

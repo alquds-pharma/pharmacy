@@ -7,7 +7,7 @@ export default async function ProductsPage() {
   // Fetch real products and categories from DB
   const [dbProductsRaw, categories] = await Promise.all([
     prisma.product.findMany({
-      include: { category: true },
+      include: { categories: true },
       orderBy: { createdAt: 'desc' }
     }),
     prisma.category.findMany({
@@ -19,7 +19,7 @@ export default async function ProductsPage() {
   const dbProducts = dbProductsRaw.map(p => ({
     id: p.id,
     name: p.name,
-    category: p.category.name,
+    categories: p.categories.map(c => c.name),
     brand: "القدس", // Default for now, as brand is not in schema
     price: p.price,
     image: p.image || "/placeholder.png",

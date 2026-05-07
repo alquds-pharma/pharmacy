@@ -21,12 +21,12 @@ export default function ProductsClient({
   const filteredProducts = useMemo(() => {
     return initialProducts.filter((product) => {
       const categoryMatch =
-        selectedCategory === "الكل" || product.category === selectedCategory;
+        selectedCategory === "الكل" || product.categories.includes(selectedCategory);
       const brandMatch =
         selectedBrand === "الكل" || product.brand === selectedBrand;
       const searchMatch =
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase());
+        product.categories.some(cat => cat.toLowerCase().includes(searchQuery.toLowerCase()));
       return categoryMatch && brandMatch && searchMatch;
     });
   }, [initialProducts, selectedCategory, selectedBrand, searchQuery]);

@@ -16,8 +16,8 @@ type Product = {
   description: string | null;
   price: number;
   image: string | null;
-  categoryId: string;
   isNew: boolean;
+  categories: { id: string; name: string }[];
 };
 
 export default function EditProductModal({ 
@@ -32,6 +32,7 @@ export default function EditProductModal({
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(product.image);
   const [isNew, setIsNew] = useState(product.isNew);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(product.categories.map(c => c.id));
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +51,7 @@ export default function EditProductModal({
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     formData.set("isNew", isNew.toString());
+    selectedCategories.forEach(id => formData.append("categoryIds", id));
     try {
       await updateProduct(product.id, formData);
       onClose();
@@ -103,16 +105,23 @@ export default function EditProductModal({
               </div>
                 <input type="hidden" name="price" value="0" />
               <div>
-                <label className="block text-sm font-bold mb-2 dark:text-slate-300">القسم</label>
-                <select 
-                  name="categoryId" 
-                  defaultValue={product.categoryId}
-                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white"
-                >
+                <label className="block text-sm font-bold mb-3 dark:text-slate-300">الأقسام</label>
+                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
                   {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    <label key={cat.id} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedCategories.includes(cat.id)}
+                        onChange={(e) => {
+                          if(e.target.checked) setSelectedCategories([...selectedCategories, cat.id])
+                          else setSelectedCategories(selectedCategories.filter(id => id !== cat.id))
+                        }}
+                        className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-600 dark:text-slate-300 truncate">{cat.name}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
               </div>
             </div>
 

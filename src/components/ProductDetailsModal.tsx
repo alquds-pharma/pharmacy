@@ -63,12 +63,14 @@ export default function ProductDetailsModal({ product, onClose }: ModalProps) {
               )}
               
               {/* Floating Badges */}
-              <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-                <span className="bg-teal text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-teal/20">
-                  {product.category}
-                </span>
+              <div className="absolute bottom-6 right-6 flex flex-wrap flex-col gap-2 items-end">
+                {product.categories.map((cat, index) => (
+                  <span key={index} className="bg-teal text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-teal/20">
+                    {cat}
+                  </span>
+                ))}
                 {product.brand && (
-                  <span className="bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                  <span className="bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
                     {product.brand}
                   </span>
                 )}
