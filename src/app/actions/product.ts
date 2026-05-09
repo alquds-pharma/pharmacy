@@ -192,3 +192,25 @@ export async function addCategory(formData: FormData) {
   revalidatePath("/adcpanforpharmacyquds/categories");
   revalidatePath("/products");
 }
+
+export async function updateCategory(id: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  const imageFile = formData.get("image") as File;
+
+  if (!name) throw new Error("Name is required");
+
+  const updateData: any = { name };
+
+  if (imageFile && imageFile.size > 0) {
+    updateData.image = await uploadImage(imageFile, "pharmacy/categories");
+  }
+
+  await prisma.category.update({
+    where: { id },
+    data: updateData,
+  });
+
+  revalidatePath("/adcpanforpharmacyquds/categories");
+  revalidatePath("/products");
+  return { success: true };
+}
