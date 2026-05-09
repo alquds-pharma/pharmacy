@@ -59,9 +59,8 @@ export default function Header() {
           <motion.div layoutId="main-cart" className="relative">
             <button
               onClick={() => setIsCartOpen(true)}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
-              aria-label="Open Cart"
-              style={{ opacity: cartItemsCount > 0 ? 0 : 1 }} // Hide but keep layout space
+              className={`p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors ${cartItemsCount > 0 ? 'invisible' : 'visible'}`}
+              aria-label="فتح سلة الطلبات"
             >
               <ShoppingBag className="w-5 h-5" />
             </button>

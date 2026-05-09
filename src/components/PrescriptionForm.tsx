@@ -62,14 +62,14 @@ export default function PrescriptionForm() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             onSubmit={handleSubmit}
-            className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-primary/5 border border-slate-100"
+            className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-primary/5 border border-slate-100 dark:border-slate-800"
           >
             <div className="text-center mb-10">
               <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary">
                 <FileText className="w-10 h-10" />
               </div>
-              <h2 className="text-3xl font-black text-slate-900 mb-2">إرسال وصفة طبية</h2>
-              <p className="text-slate-500">قم بتحميل صورة الوصفة وسنقوم بتجهيزها لك فوراً</p>
+              <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2">إرسال وصفة طبية</h2>
+              <p className="text-slate-500 dark:text-slate-400">قم بتحميل صورة الوصفة وسنقوم بتجهيزها لك فوراً</p>
             </div>
 
             <div className="space-y-6">
@@ -84,7 +84,7 @@ export default function PrescriptionForm() {
                   required
                   type="text"
                   placeholder="أدخل اسمك هنا..."
-                  className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
@@ -100,7 +100,7 @@ export default function PrescriptionForm() {
                   type="tel"
                   placeholder="مثال: 770709062"
                   dir="ltr"
-                  className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-right"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-right dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
@@ -139,7 +139,7 @@ export default function PrescriptionForm() {
                   name="notes"
                   placeholder="أي معلومات إضافية تود إخبارنا بها..."
                   rows={4}
-                  className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 px-6 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
@@ -151,7 +151,7 @@ export default function PrescriptionForm() {
                 {isSubmitting ? "جاري الإرسال..." : (
                   <>
                     إرسال الآن
-                    <Send className="w-6 h-6 rotate-180" />
+                    <Send className="w-6 h-6" />
                   </>
                 )}
               </button>
@@ -162,7 +162,7 @@ export default function PrescriptionForm() {
             key="success"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-[2.5rem] p-12 text-center shadow-xl border border-slate-100"
+            className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-12 text-center shadow-xl border border-slate-100 dark:border-slate-800"
           >
             <div className="w-24 h-24 bg-teal/10 rounded-full flex items-center justify-center mx-auto mb-8 text-teal">
               <CheckCircle2 className="w-16 h-16" />

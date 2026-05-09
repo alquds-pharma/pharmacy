@@ -4,27 +4,35 @@ import ProductsClient from "@/components/ProductsClient";
 export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
-  // Fetch real products and categories from DB
-  const [dbProductsRaw, categories] = await Promise.all([
-    prisma.product.findMany({
-      include: { categories: true },
-      orderBy: { createdAt: 'desc' }
-    }),
-    prisma.category.findMany({
-      orderBy: { name: 'asc' }
-    })
-  ]);
+  let dbProducts: any[] = [];
+  let categories: any[] = [];
 
-  // Map them to match the expected format
-  const dbProducts = dbProductsRaw.map(p => ({
-    id: p.id,
-    name: p.name,
-    categories: p.categories.map(c => c.name),
-    brand: "القدس", // Default for now, as brand is not in schema
-    price: p.price,
-    image: p.image || "/placeholder.png",
-    isNew: p.isNew,
-  }));
+  try {
+    const [dbProductsRaw, dbCategories] = await Promise.all([
+      prisma.product.findMany({
+        include: { categories: true },
+        orderBy: { createdAt: 'desc' }
+      }),
+      prisma.category.findMany({
+        orderBy: { name: 'asc' }
+      })
+    ]);
+
+    dbProducts = dbProductsRaw.map(p => ({
+      id: p.id,
+      name: p.name,
+      categories: p.categories.map((c: any) => c.name),
+      brand: "القدس",
+      price: p.price,
+      image: p.image || "/placeholder.svg",
+      isNew: p.isNew,
+      description: p.description || "",
+    }));
+    categories = dbCategories;
+  } catch (error) {
+    console.error("Database connection error:", error);
+    // Return empty state - the UI handles empty products gracefully
+  }
 
   return (
     <ProductsClient 
@@ -33,4 +41,3 @@ export default async function ProductsPage() {
     />
   );
 }
-

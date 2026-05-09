@@ -47,19 +47,19 @@ export default function Hero() {
               </div>
 
               <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div className="flex items-center gap-3 justify-center lg:justify-start text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 justify-center lg:justify-end text-slate-600 dark:text-slate-400">
                   <div className="w-10 h-10 bg-white dark:bg-slate-900 shadow-md rounded-lg flex items-center justify-center text-teal dark:text-teal-light">
                     <Truck className="w-5 h-5" />
                   </div>
                   <span className="font-semibold text-sm">توصيل لجميع مناطق صنعاء</span>
                 </div>
-                <div className="flex items-center gap-3 justify-center lg:justify-start text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 justify-center lg:justify-end text-slate-600 dark:text-slate-400">
                   <div className="w-10 h-10 bg-white dark:bg-slate-900 shadow-md rounded-lg flex items-center justify-center text-teal dark:text-teal-light">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <span className="font-semibold text-sm">أدوية مضمونة 100%</span>
                 </div>
-                <div className="flex items-center gap-3 justify-center lg:justify-start text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-3 justify-center lg:justify-end text-slate-600 dark:text-slate-400">
                   <div className="w-10 h-10 bg-white dark:bg-slate-900 shadow-md rounded-lg flex items-center justify-center text-teal dark:text-teal-light">
                     <Clock className="w-5 h-5" />
                   </div>

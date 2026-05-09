@@ -83,7 +83,7 @@ export async function createPrescriptionOrder(formData: FormData) {
 
     let imageUrl: string | null = null;
     if (imageFile && imageFile.size > 0) {
-      imageUrl = await uploadImage(imageFile, "prescriptions");
+      imageUrl = await uploadImage(imageFile, "pharmacy/prescriptions");
     }
 
     const orderId = await generateOrderId();

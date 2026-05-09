@@ -116,7 +116,7 @@ export async function generateDailyReport() {
     
     // 4. Upload to Cloudinary
     const filename = `report_${Date.now()}.xlsx`;
-    const fileUrl = await uploadRaw(new Blob([excelBuffer]), filename, "reports");
+    const fileUrl = await uploadRaw(new Blob([excelBuffer]), filename, "pharmacy/reports");
 
     // 5. Generate Custom ID and Save Report
     const reportId = await generateReportId();

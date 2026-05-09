@@ -112,14 +112,14 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8" dir="rtl">
       <div className="flex items-center gap-2 mb-8">
         <Link href="/products" className="text-slate-500 hover:text-primary transition-colors flex items-center gap-1">
           <ArrowRight className="w-4 h-4" /> العودة للتصفح
         </Link>
       </div>
 
-      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-8">إتمام الطلب</h1>
+      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-8 text-right">إتمام الطلب</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form Section */}
@@ -184,7 +184,7 @@ export default function CheckoutPage() {
               {cartItems.map(item => (
                 <div key={item.id} className="flex gap-4 border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0 last:pb-0">
                   <div className="w-16 h-16 relative bg-white rounded-lg overflow-hidden shrink-0 border border-slate-100">
-                    <Image src={item.image || '/placeholder.png'} alt={item.name} fill className="object-contain p-1" />
+                    <Image src={item.image || '/placeholder.svg'} alt={item.name} fill className="object-contain p-1" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm line-clamp-2 dark:text-slate-200">{item.name}</h3>

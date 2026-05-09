@@ -36,10 +36,15 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate sending
+    
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
+      
+      // Send via WhatsApp
+      const msg = `مرحباً صيدلية القدس، لدي استفسار:\n\nالاسم: ${formState.name}\nالهاتف: ${formState.phone}\nالرسالة:\n${formState.message}`;
+      const url = `https://wa.me/967770709062?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
     }, 1200);
   };
 
@@ -229,7 +234,9 @@ export default function ContactPage() {
                   فيسبوك
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 text-white px-5 py-3 rounded-2xl font-bold text-sm hover:opacity-90 transition-all hover:-translate-y-0.5 shadow-lg shadow-pink-500/20"
                 >
                   <Instagram className="w-5 h-5" />
@@ -241,7 +248,7 @@ export default function ContactPage() {
 
           {/* Right: Message Form */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}

@@ -30,7 +30,7 @@ export default function FloatingCart() {
             mass: 1
           }}
           onClick={() => setIsCartOpen(true)}
-          className="fixed bottom-10 left-10 z-50 p-2 bg-white/20 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-2xl flex flex-col items-center justify-center border border-white/30 dark:border-slate-700/50 group overflow-hidden"
+          className="fixed bottom-24 left-4 z-50 p-2 bg-white/20 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-2xl flex flex-col items-center justify-center border border-white/30 dark:border-slate-700/50 group overflow-hidden"
           aria-label="سلة المشتريات"
         >
           {/* The 3D WOW Factor */}
@@ -50,7 +50,7 @@ export default function FloatingCart() {
 
           <div className="pb-4 px-4 flex flex-col items-center">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary dark:text-teal-light opacity-80">
-              Your Cart
+              سلتك
             </span>
             <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">
               انقر للعرض

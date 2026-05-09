@@ -38,10 +38,10 @@ export default function ProductDetailsModal({ product, onClose }: ModalProps) {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-[32px] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
           >
-            {/* Close Button */}
+            {/* Close Button - positioned at top-start in RTL = top-right visually */}
             <button
               onClick={onClose}
-              className="absolute top-4 left-4 z-10 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md text-slate-500 hover:text-slate-900 dark:hover:text-white rounded-full transition-all shadow-sm"
+              className="absolute top-4 right-4 z-10 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md text-slate-500 hover:text-slate-900 dark:hover:text-white rounded-full transition-all shadow-sm"
             >
               <X className="w-5 h-5" />
             </button>

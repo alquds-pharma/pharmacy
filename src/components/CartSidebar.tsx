@@ -16,7 +16,7 @@ export default function CartSidebar() {
         className="fixed inset-0 bg-black/50 z-50 transition-opacity" 
         onClick={() => setIsCartOpen(false)}
       />
-      <div className="fixed top-0 left-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl z-50 flex flex-col transform transition-transform">
+      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl z-50 flex flex-col transform transition-transform" dir="rtl">
         <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <h2 className="text-xl font-bold flex items-center gap-2 dark:text-white">
             <ShoppingBag className="w-5 h-5" />
@@ -61,7 +61,7 @@ export default function CartSidebar() {
             cartItems.map((item) => (
               <div key={item.id} className="flex gap-4 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
                 <div className="w-20 h-20 relative bg-white rounded-lg overflow-hidden shrink-0 border border-slate-100">
-                  <Image src={item.image || '/placeholder.png'} alt={item.name} fill className="object-contain p-2" />
+                  <Image src={item.image || '/placeholder.svg'} alt={item.name} fill className="object-contain p-2" />
                 </div>
                 <div className="flex-1 flex flex-col">
                   <div className="flex justify-between items-start">
