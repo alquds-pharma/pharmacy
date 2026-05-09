@@ -23,7 +23,6 @@ export default async function ProductsPage() {
       name: p.name,
       categories: p.categories.map((c: any) => c.name),
       brand: "القدس",
-      price: p.price,
       image: p.image || "/placeholder.svg",
       isNew: p.isNew,
       description: p.description || "",

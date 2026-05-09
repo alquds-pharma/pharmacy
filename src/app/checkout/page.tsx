@@ -9,7 +9,7 @@ import Image from "next/image";
 import { createOrder } from "@/app/actions/order";
 
 export default function CheckoutPage() {
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, clearCart } = useCart();
   const router = useRouter();
   
   const [formData, setFormData] = useState({
@@ -29,12 +29,10 @@ export default function CheckoutPage() {
         customerName: formData.name,
         customerPhone: formData.phone,
         customerAddress: formData.address,
-        totalAmount: Number(cartTotal) || 0,
         items: cartItems.map(item => ({
-          productId: String(item.id), // Ensure id is a string for Next.js serialization
+          productId: String(item.id),
           productName: item.name || "صنف",
           quantity: Number(item.quantity) || 1,
-          price: Number(item.price) || 0
         }))
       });
       
@@ -195,9 +193,11 @@ export default function CheckoutPage() {
             </div>
             
             
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center text-lg font-bold">
-              <span className="text-slate-700 dark:text-slate-300">السعر الإجمالي:</span>
-              <span className="text-primary dark:text-primary-light text-sm">يتم التحديد عند التواصل</span>
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex items-start gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <span className="text-lg">💬</span>
+                <span>سيتم التواصل معك عبر واتساب لتأكيد السعر وموعد التوصيل بعد إرسال الطلب.</span>
+              </div>
             </div>
           </div>
         </div>

@@ -26,7 +26,6 @@ model Product {
   id          String      @id
   name        String
   description String?
-  price       Float
   image       String?
   isNew       Boolean     @default(false)
   categories  Category[]  @relation("ProductToCategory")
@@ -42,7 +41,6 @@ model Order {
   customerName    String
   customerPhone   String
   customerAddress String?
-  totalAmount     Float       @default(0)
   image           String?
   type            String      @default("CART")   // CART or PRESCRIPTION
   status          String      @default("PENDING") // PENDING, COMPLETED, CANCELLED
@@ -64,7 +62,6 @@ model OrderItem {
   product     Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productName String   @default("منتج")
   quantity    Int
-  price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -75,12 +72,11 @@ model OrderItem {
 
 model Report {
   id          String   @id
-  title       String   // e.g. "تقرير يومي - 2024/05/07"
-  type        String   // "DAILY" or "WEEKLY"
-  dateRange   String   // e.g. "2024/05/07"
-  totalAmount Float
+  title       String
+  type        String
+  dateRange   String
   ordersCount Int
-  fileUrl     String   // Cloudinary PDF link
+  fileUrl     String
   createdAt   DateTime @default(now())
 
   @@map("reports")

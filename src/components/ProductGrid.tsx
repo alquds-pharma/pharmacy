@@ -126,7 +126,7 @@ export default function ProductGrid({ products }: GridProps) {
                     </div>
                   ) : (
                     <button
-                      onClick={() => addToCart({ id: product.id.toString(), name: product.name, price: product.price, image: product.image || "" })}
+                      onClick={() => addToCart({ id: product.id.toString(), name: product.name, image: product.image || "" })}
                       className="w-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-teal-light text-center py-2.5 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-primary hover:text-white dark:hover:bg-teal dark:hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2"
                     >
                       <ShoppingCart className="w-3.5 h-3.5 md:w-4 md:h-4" />

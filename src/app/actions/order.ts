@@ -29,14 +29,12 @@ type OrderItemInput = {
   productId?: string;
   productName: string;
   quantity: number;
-  price: number;
 };
 
 export async function createOrder(data: {
   customerName: string;
   customerPhone: string;
   customerAddress: string;
-  totalAmount: number;
   items: OrderItemInput[];
 }) {
   try {
@@ -47,17 +45,14 @@ export async function createOrder(data: {
         customerName: data.customerName,
         customerPhone: data.customerPhone,
         customerAddress: data.customerAddress,
-        totalAmount: data.totalAmount,
         type: "CART",
         items: {
           create: data.items.map((item) => {
-            // Sanitize productId: if it's a dummy product (e.g., id "1", "2"), set to null to avoid FK errors
             const isValidId = typeof item.productId === 'string' && item.productId.length > 10;
             return {
               productId: isValidId ? item.productId : null,
               productName: item.productName,
               quantity: item.quantity,
-              price: item.price,
             };
           }),
         },
@@ -95,7 +90,6 @@ export async function createPrescriptionOrder(formData: FormData) {
         customerAddress: notes,
         type: "PRESCRIPTION",
         image: imageUrl,
-        totalAmount: 0,
       },
     });
 

@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function CartSidebar() {
-  const { isCartOpen, setIsCartOpen, cartItems, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+  const { isCartOpen, setIsCartOpen, cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
 
   if (!isCartOpen) return null;
 

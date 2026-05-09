@@ -9,7 +9,6 @@ export interface Product {
   name: string;
   categories: string[];
   brand?: string;
-  price: number;
   description?: string;
   image: string;
   isAvailable?: boolean;

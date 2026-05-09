@@ -140,7 +140,7 @@ export default function ProductDetailsModal({ product, onClose }: ModalProps) {
                       </div>
                     ) : (
                       <button
-                        onClick={() => addToCart({ id: product.id.toString(), name: product.name, price: product.price, image: product.image || "" })}
+                        onClick={() => addToCart({ id: product.id.toString(), name: product.name, image: product.image || "" })}
                         className="w-full bg-primary text-white py-4 rounded-2xl font-black shadow-xl shadow-primary/30 hover:bg-primary-dark transition-all flex items-center justify-center gap-3 active:scale-95"
                       >
                         <ShoppingCart className="w-5 h-5" />

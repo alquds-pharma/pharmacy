@@ -5,7 +5,6 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 export type CartItem = {
   id: string;
   name: string;
-  price: number;
   image: string;
   quantity: number;
 };
@@ -18,7 +17,6 @@ type CartContextType = {
   clearCart: () => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
-  cartTotal: number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -69,8 +67,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => setCartItems([]);
 
-  const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
   return (
     <CartContext.Provider
       value={{
@@ -81,7 +77,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         isCartOpen,
         setIsCartOpen,
-        cartTotal,
       }}
     >
       {children}
