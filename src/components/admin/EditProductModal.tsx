@@ -14,7 +14,6 @@ type Product = {
   id: string;
   name: string;
   description: string | null;
-  price: number;
   image: string | null;
   isNew: boolean;
   categories: { id: string; name: string }[];
@@ -103,7 +102,6 @@ export default function EditProductModal({
                   className="w-full p-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary dark:text-white" 
                 />
               </div>
-                <input type="hidden" name="price" value="0" />
               <div>
                 <label className="block text-sm font-bold mb-3 dark:text-slate-300">الأقسام</label>
                 <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
