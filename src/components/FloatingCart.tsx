@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SplineScene from "./SplineScene";
 
 export default function FloatingCart() {
-  const { cartItems, setIsCartOpen } = useCart();
+  const { cartItems, isCartOpen, setIsCartOpen } = useCart();
   const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -29,7 +29,7 @@ export default function FloatingCart() {
             damping: 15,
             mass: 1
           }}
-          onClick={() => setIsCartOpen(true)}
+          onClick={() => setIsCartOpen(!isCartOpen)}
           className="fixed bottom-24 left-4 z-50 p-2 bg-white/20 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[40px] shadow-2xl flex flex-col items-center justify-center border border-white/30 dark:border-slate-700/50 group overflow-hidden"
           aria-label="سلة المشتريات"
         >

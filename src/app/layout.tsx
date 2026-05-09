@@ -49,8 +49,8 @@ export default function RootLayout({
       <body className={`${tajawal.variable} font-tajawal bg-white dark:bg-slate-950 transition-colors duration-300`}>
         <CartProvider>
           <Header />
-          {/* pb-24 leaves room for the fixed bottom nav */}
-          <div className="pb-24">
+          {/* pt-16 leaves room for the fixed header */}
+          <div className="pt-16 pb-24">
             {children}
             <Footer />
           </div>
