@@ -11,23 +11,37 @@ async function generateProductId(): Promise<string> {
   const yy = date.getFullYear().toString().slice(-2);
   const prefix = `PRD-${dd}${mm}${yy}`;
 
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
-
-  const todayCount = await prisma.product.count({
-    where: { createdAt: { gte: startOfDay, lte: endOfDay } },
+  // Find the highest existing sequence for today (safe after deletions)
+  const todayProducts = await prisma.product.findMany({
+    select: { id: true },
+    where: { id: { startsWith: prefix } },
   });
 
-  const seq = (todayCount + 1).toString().padStart(4, '0');
+  let maxSeq = 0;
+  for (const p of todayProducts) {
+    const match = p.id.match(/-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxSeq) maxSeq = num;
+    }
+  }
+
+  const seq = (maxSeq + 1).toString().padStart(4, '0');
   return `${prefix}-${seq}`;
 }
 
 async function generateCategoryId(): Promise<string> {
-  const count = await prisma.category.count();
-  const seq = (count + 1).toString().padStart(3, '0');
-  return `CAT-${seq}`;
+  // Use max existing ID sequence — safe after deletions, no hard limit
+  const categories = await prisma.category.findMany({ select: { id: true } });
+  let maxSeq = 0;
+  for (const cat of categories) {
+    const match = cat.id.match(/CAT-(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxSeq) maxSeq = num;
+    }
+  }
+  return `CAT-${(maxSeq + 1).toString().padStart(3, '0')}`;
 }
 
 export async function addProduct(formData: FormData) {
@@ -177,9 +191,8 @@ export async function addCategory(formData: FormData) {
     imageUrl = await uploadImage(imageFile, "pharmacy/categories");
   }
 
-  // Custom ID generation
-  const count = await prisma.category.count();
-  const categoryId = `CAT-${(count + 1).toString().padStart(3, '0')}`;
+  // Safe ID generation (handles deletions, no 999 limit)
+  const categoryId = await generateCategoryId();
 
   await prisma.category.create({ 
     data: { 
