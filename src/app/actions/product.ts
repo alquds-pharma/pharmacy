@@ -33,7 +33,6 @@ async function generateCategoryId(): Promise<string> {
 export async function addProduct(formData: FormData) {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const price = parseFloat(formData.get("price") as string);
   const imageFile = formData.get("image") as File;
   const categoryIds = formData.getAll("categoryIds") as string[];
   const newCategoryName = formData.get("newCategoryName") as string;
@@ -44,7 +43,7 @@ export async function addProduct(formData: FormData) {
     imageUrl = await uploadImage(imageFile, "pharmacy/products");
   }
 
-  if (!name || isNaN(price) || (categoryIds.length === 0 && !newCategoryName)) {
+  if (!name || (categoryIds.length === 0 && !newCategoryName)) {
     throw new Error("Missing required fields");
   }
 
@@ -69,7 +68,6 @@ export async function addProduct(formData: FormData) {
       id: productId,
       name,
       description,
-      price,
       image: imageUrl,
       isNew,
       categories: {
@@ -106,7 +104,6 @@ export async function deleteProduct(id: string) {
 export async function updateProduct(id: string, formData: FormData) {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const price = parseFloat(formData.get("price") as string);
   const categoryIds = formData.getAll("categoryIds") as string[];
   const imageFile = formData.get("image") as File;
   const isNew = formData.get("isNew") === "true";
@@ -114,7 +111,6 @@ export async function updateProduct(id: string, formData: FormData) {
   const updateData: any = {
     name,
     description,
-    price,
     isNew,
     categories: {
       set: categoryIds.map(id => ({ id }))
