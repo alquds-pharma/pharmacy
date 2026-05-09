@@ -39,9 +39,8 @@ export async function generateDailyReport() {
       return { success: false, error: "لا توجد طلبات جديدة لتوليد تقرير عنها" };
     }
 
-    const totalAmount = orders.reduce((sum, order) => sum + order.totalAmount, 0);
     const dateStr = new Date().toLocaleDateString("ar-EG").replace(/\//g, "-");
-    const reportTitle = `تقرير المبيعات اليومي - ${dateStr}`;
+    const reportTitle = `تقرير الطلبات اليومي - ${dateStr}`;
 
     // 2. Prepare Data for Excel (Full Details)
     const data = orders.map((order) => {
@@ -55,9 +54,8 @@ export async function generateDailyReport() {
         "اسم العميل": order.customerName,
         "رقم الهاتف": order.customerPhone,
         "العنوان / الملاحظات": order.customerAddress,
-        "الأدوية المطلوبة": itemsList, // Detailed items
+        "الأدوية المطلوبة": itemsList,
         "نوع الطلب": order.type === "PRESCRIPTION" ? "وصفة طبية" : "سلة مشتريات",
-        "المبلغ الإجمالي": order.totalAmount,
         "رابط الوصفة (إن وجد)": order.image || "لا يوجد",
         "حالة الطلب": order.status,
         "التاريخ والوقت": new Date(order.createdAt).toLocaleString("ar-EG"),
@@ -67,11 +65,11 @@ export async function generateDailyReport() {
     // 3. Create Workbook and Worksheet with Formal Header
     const header = [
       ["صيدلية القدس"],
-      ["تقرير المبيعات المالي الرسمي"],
+      ["تقرير الطلبات الرسمي"],
       [`تاريخ توليد التقرير: ${new Date().toLocaleString("ar-EG")}`],
-      [`إجمالي الإيرادات في هذا التقرير: ${totalAmount.toLocaleString()} ريال`],
-      [], // Empty row for spacing
-      ["رقم الطلب", "اسم العميل", "رقم الهاتف", "العنوان / الملاحظات", "الأدوية المطلوبة", "نوع الطلب", "المبلغ الإجمالي", "رابط الوصفة", "حالة الطلب", "التاريخ والوقت"]
+      [`إجمالي الطلبات: ${orders.length} طلب`],
+      [],
+      ["رقم الطلب", "اسم العميل", "رقم الهاتف", "العنوان / الملاحظات", "الأدوية المطلوبة", "نوع الطلب", "رابط الوصفة", "حالة الطلب", "التاريخ والوقت"]
     ];
 
     // Convert data objects to arrays for aoa_to_sheet
@@ -82,7 +80,6 @@ export async function generateDailyReport() {
       item["العنوان / الملاحظات"],
       item["الأدوية المطلوبة"],
       item["نوع الطلب"],
-      item["المبلغ الإجمالي"],
       item["رابط الوصفة (إن وجد)"],
       item["حالة الطلب"],
       item["التاريخ والوقت"]
@@ -92,16 +89,8 @@ export async function generateDailyReport() {
     
     // Set column widths (Enhanced for more content)
     const wscols = [
-      { wch: 18 }, // ID
-      { wch: 18 }, // Customer
-      { wch: 15 }, // Phone
-      { wch: 25 }, // Address
-      { wch: 45 }, // Medicines
-      { wch: 15 }, // Type
-      { wch: 15 }, // Amount
-      { wch: 35 }, // Prescription Link
-      { wch: 15 }, // Status
-      { wch: 25 }, // Date
+      { wch: 18 }, { wch: 18 }, { wch: 15 }, { wch: 25 },
+      { wch: 45 }, { wch: 15 }, { wch: 35 }, { wch: 15 }, { wch: 25 },
     ];
     worksheet["!cols"] = wscols;
 
@@ -126,7 +115,6 @@ export async function generateDailyReport() {
         title: reportTitle,
         type: "DAILY",
         dateRange: dateStr,
-        totalAmount,
         ordersCount: orders.length,
         fileUrl,
       },
