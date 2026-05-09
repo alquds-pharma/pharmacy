@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-const IMG = "https://res.cloudinary.com/dtswa1v44/image/upload/v1778110092/pharmacy/h4rjfdpsw3dpkctytku4.png";
 
 const CATEGORIES = [
   { id: "cat-001", name: "بيو بالانس - Bio Balance" },
@@ -108,17 +107,17 @@ async function main() {
         name: p.name,
         description: p.desc,
         isNew: true,
-        image: IMG,
+        image: null,
         categories: { set: [{ id: p.cat }] },
       },
       create: {
         id: p.id,
         name: p.name,
         description: p.desc,
-        image: IMG,
+        image: null,
         isNew: true,
         categories: { connect: [{ id: p.cat }] },
-      },
+      } as any,
     });
     console.log(`   ✅ ${p.name}`);
   }
