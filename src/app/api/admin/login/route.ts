@@ -18,11 +18,13 @@ export async function POST(req: Request) {
       record.attempts = 0;
       rateLimitMap.set(key, record);
       
+      // Session-only cookie: no maxAge / expires → deleted when browser closes
       cookies().set("admin_auth", "secret_token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        path: '/'
+        path: '/',
+        // maxAge intentionally omitted → session cookie (browser-close = logout)
       });
       
       return NextResponse.json({ success: true });

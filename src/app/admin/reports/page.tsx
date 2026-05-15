@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
-import { generateDailyReport, getReports } from "@/app/actions/report";
-import { FileText, Download, TrendingUp, Calendar, Trash2, Plus, ArrowUpRight, BarChart3 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { getReports } from "@/app/actions/report";
+import { FileText, Download, TrendingUp, BarChart3, ShoppingBag } from "lucide-react";
 
 import ReportButton from "@/components/admin/ReportButton";
 
@@ -64,8 +63,6 @@ export default async function AdminReportsPage() {
               <tr>
                 <th className="p-5 font-bold text-sm">عنوان التقرير</th>
                 <th className="p-5 font-bold text-sm">التاريخ</th>
-                <th className="p-5 font-bold text-sm">عدد الطلبات</th>
-                <th className="p-5 font-bold text-sm">الإجمالي</th>
                 <th className="p-5 font-bold text-sm text-center">التقرير (PDF)</th>
               </tr>
             </thead>
@@ -82,14 +79,6 @@ export default async function AdminReportsPage() {
                   </td>
                   <td className="p-5 text-slate-600 dark:text-slate-400 text-sm font-bold">
                     {new Date(report.createdAt).toLocaleDateString("ar-EG")}
-                  </td>
-                  <td className="p-5">
-                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold">
-                      {report.ordersCount} طلبات
-                    </span>
-                  </td>
-                  <td className="p-5 font-black text-slate-800 dark:text-white">
-                    {report.totalAmount.toLocaleString()} ريال
                   </td>
                   <td className="p-5">
                     <div className="flex justify-center">
@@ -109,7 +98,7 @@ export default async function AdminReportsPage() {
 
               {reports.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="p-20 text-center text-slate-400">
+                  <td colSpan={3} className="p-20 text-center text-slate-400">
                     <div className="flex flex-col items-center gap-4">
                       <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center">
                         <BarChart3 className="w-10 h-10 text-slate-200" />
@@ -124,14 +113,5 @@ export default async function AdminReportsPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-// Helper icons
-function ShoppingBag({ className }: { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
-    </svg>
   );
 }
