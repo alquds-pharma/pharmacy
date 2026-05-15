@@ -65,7 +65,7 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
               <th className="p-4 font-medium">الهاتف</th>
               <th className="p-4 font-medium">العنوان/الملاحظات</th>
               <th className="p-4 font-medium">التفاصيل</th>
-              <th className="p-4 font-medium">الإجمالي</th>
+
               <th className="p-4 font-medium">التاريخ</th>
               <th className="p-4 font-medium">الحالة</th>
             </tr>
@@ -111,7 +111,7 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
                     </ul>
                   )}
                 </td>
-                <td className="p-4 font-bold text-primary">{order.totalAmount > 0 ? `${order.totalAmount} ريال` : 'غير محدد'}</td>
+
                 <td className="p-4 text-slate-500">
                   {formatDistanceToNow(new Date(order.createdAt), { addSuffix: true, locale: ar })}
                 </td>
@@ -135,7 +135,7 @@ export default function OrdersClient({ initialOrders }: { initialOrders: any[] }
             ))}
             {filteredOrders.length === 0 && (
               <tr>
-                <td colSpan={9} className="p-8 text-center text-slate-500">لا يوجد طلبات بهذه الحالة حالياً.</td>
+                <td colSpan={8} className="p-8 text-center text-slate-500">لا يوجد طلبات بهذه الحالة حالياً.</td>
               </tr>
             )}
           </tbody>

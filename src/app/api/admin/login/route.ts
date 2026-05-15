@@ -14,7 +14,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: `تم حظر الدخول مؤقتاً. يرجى الانتظار ${remainingSeconds} ثانية.` }, { status: 429 });
     }
 
-    if (password === 'phar123@#') {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      return NextResponse.json({ error: "خطأ في إعداد الخادم" }, { status: 500 });
+    }
+
+    if (password === adminPassword) {
       record.attempts = 0;
       rateLimitMap.set(key, record);
       
